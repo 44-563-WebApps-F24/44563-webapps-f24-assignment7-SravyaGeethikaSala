@@ -60,9 +60,9 @@
         <div class="box" id="score">
             <p>Score is zero.</p>
         </div>
-        <div class="box" id="clickHelp">
+        <div class="box" id="clickHelp" onclick="help()">
             <p>Click for help.</p>
-        </div>
+        </div>        
         <div class="box" id="help">
             <p>Help report</p>
         </div>
@@ -126,8 +126,7 @@
     </div>
 
     <script>
-        // Define variables
-        const ids = [...Array(36).keys()].map(i => `img${i}`);  // Array of img0 to img35
+        const ids = [...Array(36).keys()].map(i => `img${i}`);  // Image IDs (img0 to img35)
         let score = 0;
         let locationsVisited = 0;
         let lastLocation = 0;
@@ -137,9 +136,9 @@
 
         // Check function to handle clicks
         function check(position) {
-            if (gameOver) return;  // Do nothing if game is over
+            if (gameOver) return;  // If game is over, do nothing
 
-            const imageId = ids[position];  // Get image ID from ids array
+            const imageId = ids[position];  // Get image ID from array
             const imageElement = document.getElementById(imageId);  // Get the image element
 
             if (position === lionLocation) {
@@ -155,12 +154,44 @@
                 score += 1;  // Add 1 to score
             }
 
-            locationsVisited += 1;  // Increment locations visited
+            locationsVisited += 1;
             lastLocation = position;  // Update last checked location
 
-            // Update text elements for score and locations
+            // Update the score and locations checked
             document.getElementById('score').innerHTML = `<p>Score is ${score}.</p>`;
             document.getElementById('locations').innerHTML = `<p>Number of locations checked is ${locationsVisited}.</p>`;
+        }
+
+        // Help function to give hints based on proximity to zebras and the lion
+        function help() {
+            const col = lastLocation % 6;
+            const row = Math.floor(lastLocation / 6);
+
+            const lionRow = Math.floor(lionLocation / 6);
+            const lionCol = lionLocation % 6;
+
+            // Check 4 closest locations (allow wrap-around)
+            const closestLocations = [
+                (lastLocation + 35) % 36,  // Subtract 1 with wrap-around
+                (lastLocation + 1) % 36,   // Add 1 with wrap-around
+                (lastLocation + 30) % 36,  // Subtract 6 with wrap-around
+                (lastLocation + 6) % 36    // Add 6 with wrap-around
+            ];
+
+            // Check if any of the 4 closest locations have zebras
+            if (closestLocations.some(loc => zebraLocations.includes(loc))) {
+                document.getElementById('help').innerHTML = `<p>I see stripes.</p>`;
+                return;
+            }
+
+            // Check if last location is next to the lion (row and col differ by at most 1)
+            if (Math.abs(lionRow - row) <= 1 && Math.abs(lionCol - col) <= 1) {
+                document.getElementById('help').innerHTML = `<p>Rawr</p>`;
+                return;
+            }
+
+            // If no zebras nearby and not next to the lion, return "It's grey"
+            document.getElementById('help').innerHTML = `<p>It's grey.</p>`;
         }
     </script>
 </body>
