@@ -44,7 +44,6 @@
             width: 100px;
             height: 100px;
         }
-        
     </style>
 </head>
 <body>
@@ -53,19 +52,19 @@
     </header>
 
     <div class="container">
-        <p>Click on the locations to find rare animals, watch out for the lion</p>
+        <p>Click on the locations to find rare animals, watch out for the lion!</p>
 
         <div class="box" id="locations">
-            <p>Number of locations checked is zero.</p>
+            <p>Number of locations checked: 0.</p>
         </div>
         <div class="box" id="score">
-            <p>Score is zero.</p>
+            <p>Score: 0.</p>
         </div>
         <div class="box" id="clickHelp" onclick="help()">
             <p>Click for help.</p>
         </div>        
         <div class="box" id="help">
-            <p>Help report</p>
+            <p>Help report will appear here.</p>
         </div>
     </div>
 
@@ -73,7 +72,7 @@
         <!-- Game Field with IDs and OnClick -->
         <div class="row">
             <div class="gamebox"><img id="img0" src="Tree.jpg" alt="tree" onclick="check(0)"></div>
-            <div class="gamebox "><img id="img1" src="Tree.jpg" alt="tree" onclick="check(1)"></div>
+            <div class="gamebox"><img id="img1" src="Tree.jpg" alt="tree" onclick="check(1)"></div>
             <div class="gamebox"><img id="img2" src="Tree.jpg" alt="tree" onclick="check(2)"></div>
             <div class="gamebox"><img id="img3" src="Tree.jpg" alt="tree" onclick="check(3)"></div>
             <div class="gamebox"><img id="img4" src="Tree.jpg" alt="tree" onclick="check(4)"></div>
@@ -83,7 +82,7 @@
         <div class="row">
             <div class="gamebox"><img id="img6" src="Tree.jpg" alt="tree" onclick="check(6)"></div>
             <div class="gamebox"><img id="img7" src="Tree.jpg" alt="tree" onclick="check(7)"></div>
-            <div class="gamebox "><img id="img8" src=Tree.jpg" alt="tree" onclick="check(8)"></div>
+            <div class="gamebox"><img id="img8" src="Tree.jpg" alt="tree" onclick="check(8)"></div>
             <div class="gamebox"><img id="img9" src="Tree.jpg" alt="tree" onclick="check(9)"></div>
             <div class="gamebox"><img id="img10" src="Tree.jpg" alt="tree" onclick="check(10)"></div>
             <div class="gamebox"><img id="img11" src="Tree.jpg" alt="tree" onclick="check(11)"></div>
@@ -91,7 +90,7 @@
         <div class="row">
             <div class="gamebox"><img id="img12" src="Tree.jpg" alt="tree" onclick="check(12)"></div>
             <div class="gamebox"><img id="img13" src="Tree.jpg" alt="tree" onclick="check(13)"></div>
-            <div class="gamebox "><img id="img14" src="Tree.jpg" alt="tree" onclick="check(14)"></div>
+            <div class="gamebox"><img id="img14" src="Tree.jpg" alt="tree" onclick="check(14)"></div>
             <div class="gamebox"><img id="img15" src="Tree.jpg" alt="tree" onclick="check(15)"></div>
             <div class="gamebox"><img id="img16" src="Tree.jpg" alt="tree" onclick="check(16)"></div>
             <div class="gamebox"><img id="img17" src="Tree.jpg" alt="tree" onclick="check(17)"></div>
@@ -117,7 +116,7 @@
             <div class="gamebox"><img id="img31" src="Tree.jpg" alt="tree" onclick="check(31)"></div>
             <div class="gamebox"><img id="img32" src="Tree.jpg" alt="tree" onclick="check(32)"></div>
             <div class="gamebox"><img id="img33" src="Tree.jpg" alt="tree" onclick="check(33)"></div>
-            <div class="gamebox "><img id="img34" src="Tree.jpg" alt="tree" onclick="check(34)"></div>
+            <div class="gamebox"><img id="img34" src="Tree.jpg" alt="tree" onclick="check(34)"></div>
             <div class="gamebox"><img id="img35" src="Tree.jpg" alt="tree" onclick="check(35)"></div>
         </div>
     </div>
@@ -126,64 +125,56 @@
         const ids = [...Array(36).keys()].map(i => `img${i}`);  // Image IDs (img0 to img35)
         let score = 0;
         let locationsVisited = 0;
-        let lastLocation = 0;
+        let lastLocation = null;
         const zebraLocations = [1, 8, 12, 22, 34];
         let lionLocation = Math.floor(Math.random() * 36);  // Random lion position
         let gameOver = false;
-
+    
         // Check function to handle clicks
         function check(position) {
             if (gameOver) return;
+    
             lastLocation = position;
             const imageId = ids[position];
             const imageElement = document.getElementById(imageId);
-
+    
+            console.log(`Position clicked: ${position}, Lion is at: ${lionLocation}`);
+    
             if (position === lionLocation) {
                 imageElement.src = 'lion.jpeg';  // Display lion image
                 alert('Oh no! You found the lion! Game over.');
                 gameOver = true;
                 return;
             }
-
+    
             locationsVisited++;
-            document.getElementById('locations').innerHTML = `Number of locations checked is ${locationsVisited}.`;
-
+            document.getElementById('locations').innerHTML = `Number of locations checked: ${locationsVisited}.`;
+    
             if (zebraLocations.includes(position)) {
                 score++;
-                document.getElementById('score').innerHTML = `Score is ${score}.`;
-                imageElement.src = 'zebra.jpg';  // Display zebra image
+                document.getElementById('score').innerHTML = `Score: ${score}.`;
+                imageElement.src = 'zebra.jpeg';  // Show zebra
             } else {
-                imageElement.src = 'elephant.jpg';  // Display an elephant or another animal image
+                imageElement.src = 'Tree.jpg';  // Tree or empty
             }
         }
-
-        // Help function to give clues
+    
+        // Help function to give hints
         function help() {
-            const col = lastLocation % 6;
-            const row = Math.floor(lastLocation / 6);
-
-            const nearby = [
-                (lastLocation + 35) % 36,  // wrap left (-1)
-                (lastLocation + 1) % 36,   // wrap right (+1)
-                (lastLocation + 30) % 36,  // wrap up (-6)
-                (lastLocation + 6) % 36    // wrap down (+6)
-            ];
-
-            if (nearby.some(pos => zebraLocations.includes(pos))) {
-                document.getElementById('help').innerHTML = "I see stripes!";
-                return;
+            let message = 'Hints: ';
+            if (lastLocation !== null) {
+                message += `You just checked location ${lastLocation}.`;
+                if (zebraLocations.includes(lastLocation)) {
+                    message += ' There was a zebra there!';
+                } else if (lastLocation === lionLocation) {
+                    message += ' Watch out for the lion!';
+                } else {
+                    message += ' Keep looking!';
+                }
             }
-
-            const lionCol = lionLocation % 6;
-            const lionRow = Math.floor(lionLocation / 6);
-
-            if (Math.abs(lionCol - col) <= 1 && Math.abs(lionRow - row) <= 1) {
-                document.getElementById('help').innerHTML = "Rawr!";
-                return;
-            }
-
-            document.getElementById('help').innerHTML = "It's grey!";
-        } 
+            document.getElementById('help').innerHTML = message;
+        }
     </script>
+    
 </body>
 </html>
