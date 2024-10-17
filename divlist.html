@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+     <head> 
+        <style>
+    .flex-container {
+      display: flex;  flex-direction:row;
+      background-color: green;
+  }
+
+.flex-container > div {  /*div children of the flex container*/
+  background-color: #f1f1f1; 
+  margin: 10px;  padding: 20px;  font-size: 30px;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) { 
+	 .flex-container{
+		 flex-direction:column;
+		 background-color: green;
+	  }
+	}
+</style>
+<title>Divlists pages</title>
+</head>
+
+
+
+<body>
+    <h1>Sravya Geethika builds list with divs</h1>
+
+		<div class="flex-container" id="target">
+		  <div class="divlist">row item 1</div>   
+		  <div class="divlist">row item 2</div>  
+		  <div class="divlist">row item 3</div>  
+		</div>
+		<br>
+		<input type="text" id="text1">
+	
+	<p> Press the button to create an new element of type div and then add it to the container.
+		</p>
+		<button onclick="makeNewDiv()">Add end</button>
+        <button onclick="addFront()">Add front</button>
+        <button onclick="remove()">Remove</button>
+	
+
+<script>
+	function makeNewDiv(){
+		
+		let element = document.createElement("div")
+        let val = document.getElementsByClassName("divlist").value;
+		var ele= document.getElementById("text1").value;
+		console.log(ele);
+		
+		element.innerHTML = ele;
+		element.style.color = "orange"
+
+		
+		let container = document.getElementById('target')
+
+		container.appendChild(element)
+		
+
+	}function remove()
+    {
+        const divListItems = document.getElementsByClassName("divlist");
+		const length=divListItems.length;
+		console.log(length);
+        if (length>0) {
+			var middleIndex = Math.floor(length / 2);
+            divListItems[middleIndex].remove();
+            
+        }
+    }
+	function addFront() {
+            var inputValue = document.getElementById("text1").value;
+            var newElement = document.createElement("div");
+            newElement.innerHTML = inputValue;
+            newElement.className = "divlist";
+            var container = document.querySelector(".flex-container");
+            container.insertBefore(newElement, container.firstChild);
+        }
+</script>
+</body>
+</html>	
