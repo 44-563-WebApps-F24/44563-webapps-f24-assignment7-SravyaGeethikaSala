@@ -167,9 +167,31 @@ function check(position) {
         }
 
         function help() {
-            alert("Find the zebras to score points. Don't click the lion!");
-            
-        }
+            const col = lastLocation % 6;
+            const row = Math.floor(lastLocation / 6);
+
+            const nearby = [
+                (lastLocation + 35) % 36,  // wrap left (-1)
+                (lastLocation + 1) % 36,   // wrap right (+1)
+                (lastLocation + 30) % 36,  // wrap up (-6)
+                (lastLocation + 6) % 36    // wrap down (+6)
+            ];
+
+            if (nearby.some(pos => zebraLocations.includes(pos))) {
+                document.getElementById('help').innerHTML = "I see stripes!";
+                return;
+            }
+
+            const lionCol = lionLocation % 6;
+            const lionRow = Math.floor(lionLocation / 6);
+
+            if (Math.abs(lionCol - col) <= 1 && Math.abs(lionRow - row) <= 1) {
+                document.getElementById('help').innerHTML = "Rawr!";
+                return;
+            }
+
+            document.getElementById('help'.innerHTML)="It's grey";
+                }
 
         function restartGame() {
             score = 0;
