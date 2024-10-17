@@ -141,7 +141,7 @@
             console.log(`Position clicked: ${position}, Lion is at: ${lionLocation}`);
     
             if (position === lionLocation) {
-                imageElement.src = 'lion.jpeg';  // Display lion image
+                imageElement.src = 'Lion.jpeg';  // Display lion image
                 alert('Oh no! You found the lion! Game over.');
                 gameOver = true;
                 return;
@@ -153,7 +153,7 @@
             if (zebraLocations.includes(position)) {
                 score++;
                 document.getElementById('score').innerHTML = `Score: ${score}.`;
-                imageElement.src = 'zebra.jpeg';  // Show zebra
+                imageElement.src = 'Zebra.jpeg';  // Show zebra
             } else {
                 imageElement.src = 'Tree.jpg';  // Tree or empty
             }
